@@ -52,6 +52,14 @@ HANDLERS = [
 ]
 
 SETTINGS = dict(
+  # This first setting ("autoescape=None") is recommended by the Tornado 2.0
+  # release notes, and seems to be necessary if I want my 1.x-era templates
+  # to work with Tornado 2.0.
+  # http://www.tornadoweb.org/documentation/releases/v2.0.0.html
+  #
+  # (The alternative is to update my templates so they no longer work with
+  # Tornado 1.x... which obviously I'll do eventually, but maybe not just yet.)
+  autoescape=None,
   cookie_secret=config.COOKIE_SECRET,
   login_url="/login",
   static_path=os.path.join(os.path.dirname(__file__), "static"),

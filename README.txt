@@ -48,3 +48,6 @@ of the Trac wiki syntax.  In particular:
  * **bold text** (currently must be completely on a single line, alas)
  * //italicised text// (again, currently must be on a single line)
 
+8. For more documentation about Distil (including screenshots and
+presentation slides that provide a higher-level overview), take a look
+at http://github.com/jboy/distil-extra-doc

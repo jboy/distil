@@ -22,3 +22,11 @@ each script to point to the Distil code installation.
 5. To run the webserver, it's just "python webserver.py", then direct
 your browser to http://localhost:8888/
 
+6. To import BibTeX bib-files (with optional PDFs and abstracts), use
+"python import_bib_command.py" or the equivalent shell-script wrapper
+"bin/distil-import-bib".  The "--help" command-line flag will print a
+brief usage message.  Note that the bib-importer currently processes
+only one bib-entry per invocation, and so will expect each BibTeX file
+to contain only a single bib-entry.  Note also that when the specified
+files are imported, they will be moved rather than copied.
+

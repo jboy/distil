@@ -164,6 +164,7 @@ def change_cite_key_and_rename_dir(curr_cite_key, new_cite_key):
     # we know that this topic-tag index will exist, so we use 'add...to_existing'
     # rather than 'add..._to_new' for the new cite-key.
     index_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.TOPIC_TAG_INDEX_SUBDIR)
+    filesystem_utils.ensure_dir_exists(index_dir_abspath)
     topic_tag_file_io.add_cite_key_to_existing_topic_tag_index(new_cite_key, topic_tags, index_dir_abspath)
     topic_tag_file_io.remove_cite_key_from_topic_tag_index(curr_cite_key, topic_tags, index_dir_abspath)
 

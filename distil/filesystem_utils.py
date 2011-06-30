@@ -139,6 +139,20 @@ def write_config_file(list_of_sections, fname_abspath):
       f.write("\n")
 
 
+def ensure_dir_exists(dir_abspath):
+  """Ensure directory 'dir_abspath' exists.
+
+  This function is intended to guarantee the existence of infrastructure
+  directories that should be assumed to exist during normal operation of the
+  program.
+  """
+  if not os.path.exists(dir_abspath):
+    # Whoops, the directory doesn't yet exist -- this must be a new installation,
+    # or perhaps the user simply hasn't yet imported/created any bibs, wiki topics
+    # or attachments.
+    os.makedirs(dir_abspath)
+
+
 ### Anything below this point is not part of the exported API.
 
 

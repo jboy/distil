@@ -145,6 +145,7 @@ class LogoutHandler(BaseHandler):
 class AttachmentsHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self):
+    filesystem_utils.ensure_dir_exists(self.attachments_subdir_abspath)
     all_attachment_dirnames = os.listdir(self.attachments_subdir_abspath)
     attachments_with_attrs = [attachments.get_attachment_attrs(dirname) for dirname in all_attachment_dirnames]
     attachments_with_attrs.sort()
@@ -223,6 +224,7 @@ class CiteKeysHandler(CiteKeyListBaseHandler):
     self.render_page(order_by_choice)
 
   def render_page(self, order_by="cite-key"):
+    filesystem_utils.ensure_dir_exists(self.bibs_subdir_abspath)
     cite_keys = os.listdir(self.bibs_subdir_abspath)
     cite_keys_and_attrs = map(self.get_cite_keys_and_attrs, cite_keys)
     self.sort_cite_keys_and_attrs(cite_keys_and_attrs, order_by)
@@ -474,6 +476,7 @@ class WikiWordsHandler(BaseHandler):
     if not os.path.exists(self.wiki_subdir_abspath):
       raise tornado.web.HTTPError(404)
 
+    filesystem_utils.ensure_dir_exists(self.wiki_subdir_abspath)
     basenames_and_suffices = [fname.rpartition(".") for fname in os.listdir(self.wiki_subdir_abspath)]
     titles = [basename if basename else suffix for (basename, period, suffix) in basenames_and_suffices]
     titles.sort()

@@ -26,6 +26,7 @@ from collections import defaultdict
 
 import config
 import constants
+import filesystem_utils
 import repository
 import unicode_string_utils
 
@@ -120,6 +121,8 @@ def update_topic_tags_for_cite_key(cite_key, chosen_tags, new_tags_str):
   It will also ensure that all the "new tags" are actually new, moving them into the
   collection of "chosen tags" if they're not.
   """
+  index_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.TOPIC_TAG_INDEX_SUBDIR)
+  filesystem_utils.ensure_dir_exists(index_dir_abspath)
 
   chosen_tags = set(map(sanitize_tag, chosen_tags))
   new_tags = set(map(sanitize_tag, split_at_whitespace_and_commas(new_tags_str)))
@@ -136,11 +139,6 @@ def update_topic_tags_for_cite_key(cite_key, chosen_tags, new_tags_str):
   topic_tags_fname_abspath = \
       os.path.join(config.DOCLIB_BASE_ABSPATH, constants.BIBS_SUBDIR, cite_key, constants.TOPIC_TAGS_FNAME)
   write_topic_tags(topic_tags_fname_abspath, list(chosen_tags) + list(new_tags))
-
-  index_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.TOPIC_TAG_INDEX_SUBDIR)
-  # Ensure that the index-dir actually exists.
-  if not os.path.exists(index_dir_abspath):
-    os.makedirs(index_dir_abspath)
 
   remove_cite_key_from_topic_tag_index(cite_key, removed_tags, index_dir_abspath)
   add_cite_key_to_existing_topic_tag_index(cite_key, added_tags, index_dir_abspath)

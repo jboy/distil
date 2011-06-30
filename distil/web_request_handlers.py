@@ -473,9 +473,6 @@ class WikiXHandler(BaseHandler):
 class WikiWordsHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self):
-    if not os.path.exists(self.wiki_subdir_abspath):
-      raise tornado.web.HTTPError(404)
-
     filesystem_utils.ensure_dir_exists(self.wiki_subdir_abspath)
     basenames_and_suffices = [fname.rpartition(".") for fname in os.listdir(self.wiki_subdir_abspath)]
     titles = [basename if basename else suffix for (basename, period, suffix) in basenames_and_suffices]

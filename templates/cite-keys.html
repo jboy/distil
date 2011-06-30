@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ escape(title) }}</h1>
+
+<form method="post" action="/cite-keys">
+{{ xsrf_form_html() }}
+
+<fieldset class="stand-alone">
+<label class="title" for="order-by-choice" accesskey="o">Order items by:</label>
+<select name="order-by-choice" id="order-by-choice" title="Alt+O">
+{% for choice, text in choices_and_text %}
+	<option value="{{ choice }}"{% if choice == order_by_choice %} selected="selected"{% end %}>{{ text }}</option>
+{% end %}
+</select>
+<input type="submit" name="reload-button" value="Reload" accesskey="l" title="Alt+L" />
+</fieldset>
+</form>
+
+<ul class="ids-with-titles">
+{% for item, attrs in items %}
+	<li><a href="/bib/{{ escape(item) }}" class="cite-key">{{ escape(item) }}</a>
+
+	{% if attrs.has_key("doc-type") %}
+		<span class="attrs doc-type">(<a href="{{ escape(attrs['doc-path']) }}"
+			>{{ escape(attrs['doc-type']) }}</a>)</span>
+	{% else %}
+		<span class="attrs doc-type">(<span class="warning-absent">no doc</span>)</span>
+	{% end %}
+
+	<div class="cite-key-title">
+	{{ escape(attrs['title']) }}
+	</div>
+
+	<div class="list-topic-tags">
+	<span class="attrs">
+	{% if attrs["topic-tags"] %}
+		{% if "new" in attrs["topic-tags"] %}
+			{% if any((t for t in attrs["topic-tags"] if t != "new")) %}
+				<span class="warning-absent"><a href="/tag/new">new</a></span>,
+			{% else %}
+				<span class="warning-absent"><a href="/tag/new">new</a></span>
+			{% end %}
+		{% end %}
+		{% if "unread" in attrs["topic-tags"] %}
+			{% if any((t for t in attrs["topic-tags"] if t not in ["new", "unread"])) %}
+				<span class="warning-absent"><a href="/tag/unread">unread</a></span>,
+			{% else %}
+				<span class="warning-absent"><a href="/tag/unread">unread</a></span>
+			{% end %}
+		{% end %}
+		{{ ", ".join([('<a href="/tag/%s">%s</a>' % (escape(tag), escape(tag))) for tag in attrs["topic-tags"] if tag not in ["new", "unread"]]) }}</span>
+	{% else %}
+		<span class="warning-absent">no tags</span></span>
+	{% end %}
+	</div>
+
+	</li>
+{% end %}
+</ul>
+
+<p>{% if len(items) == 1 %}1 item{% else %}{{ len(items) }} items{% end %} found.</p>
+
+{% end %}
+

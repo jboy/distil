@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<title>Sign In &mdash; distil</title>
+		<link rel="stylesheet" href="{{ static_url('css/desktop-login.css') }}" type="text/css" media="screen" />
+		<link rel="icon" href="{{ static_url('images/conical-flask-favicon.png') }}" type="image/png" />
+	</head>
+
+	<body>
+		<h1>Sign In</h1>
+		{% comment Note that we're being very careful with the 'url_escape' in the next line... %}
+		<form {% if next %}action="/login?next={{ url_escape(next) }}"{% else %}action="/login"{% end %} method="post">
+			{{ xsrf_form_html() }}
+
+			{% if error_message %}<p class="message-error">{{ escape(error_message) }}</p>{% end %}
+			<label for="username">Username:</label>
+			<input type="text" name="username" id="username"{% if prev_username %} value="{{ escape(prev_username) }}"{% end %} /><br />
+			<label for="password">Password:</label>
+			<input type="password" name="password" id="password" />
+			<input type="submit" value="Sign in" />
+
+		</form>
+	</body>
+</html>
+

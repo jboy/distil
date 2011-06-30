@@ -1,0 +1,438 @@
+body {
+	font-size: 96%;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	margin-top: 0em;
+	margin-bottom: 0em;
+}
+div#bib-summary-container {
+	background: #f0f9ff;
+	border: 1px #999999 solid;
+	padding: 0.1em;
+}
+div.cite-key-title {
+	//font-size: 108%;
+	margin-left: 1.7em;
+	padding-bottom: 0px;
+	padding-top: 2px;
+}
+// See http://www.alistapart.com/articles/multicolumnlists/ for explanation.
+// "float the sub-lists side by side, then clear the float after the final column"
+div.column-container {
+	margin-bottom: 1em;
+}
+div.column-container br {
+	// "stop the float": http://www.alistapart.com/articles/multicolumnlists/
+	clear: left;
+}
+div.column-container ul {
+	float: left;
+	margin-top: 0em;
+	padding-bottom: 0.2em;
+	width: 23%;  // Seems to need to be < 25%, or the 4th column wraps.
+}
+div#edit-topic-tags, div.wiki-area, div#edit-abstract, fieldset.stand-alone {
+	background: #f0f9ff;
+	border: 1px #999999 solid;
+	padding: 0.3em;
+	padding-bottom: 0.4em;
+}
+div#edit-abstract p {
+	background: white;
+	border-bottom: 2px solid #f0f0f0;
+	border-left: 2px solid #717171;
+	border-right: 2px solid #f0f0f0;
+	border-top: 2px solid #717171;
+	font-family: sans-serif;
+    font-size: 85%;
+	margin-bottom: 0.2em;
+	margin-top: 0.3em;
+	padding-bottom: 0.6em;
+	padding-left: 0.8em;
+	padding-right: 0.8em;
+	padding-top: 0.4em;
+	text-align: justify;
+}
+div.list-topic-tags {
+	background: #f4faff;
+	//border-left: 1px solid #f0f0f0;
+	//border-bottom: 1px solid #f2f2f2;
+	border-top: 1px solid #f0f0f0;
+	margin-left: 2.5em;
+	margin-right: 0px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+}
+div.wiki-area {
+	padding-top: 0.6em;
+}
+div.wiki-area textarea {
+	margin-top: -0.3em;
+}
+div#edit-topic-tags {
+	padding-top: 0.6em;
+}
+div#edit-topic-tags ul.form-items {
+	font-family: sans-serif;
+	font-size: 96%;
+}
+div#edit-topic-tags ul.form-items a {
+	//text-decoration: none;
+}
+div#enclose-body {
+	border: 0px;
+	left: 0.5em;
+	position: absolute;
+	right: 0.5em;
+	top: 1.5em;
+}
+div#footer {
+	border: 0px;
+	bottom: 1.5em;
+	color: #111111;
+	font-family: sans-serif;
+	font-size: 65%;
+	left: 0px;
+	margin-top: 2em;
+	width: 100%;
+}
+div#footer p {
+	text-align: center;
+}
+div#footer p a {
+	color: #111111;
+}
+div#header {
+	background: #f0f9ff;
+	border-bottom: 1px #999999 solid;
+	//border-left: 1px #999999 solid;
+	//border-right: 1px #999999 solid;
+	border-top: 1px #dddddd solid;
+	font-size: 80%;
+	height: 1.8em;
+	//left: 0.5em;
+	left: 0px;
+	position: absolute;
+	//right: 0.5em;
+	width: 100%;
+}
+div#header ul#toprow-login {
+	right: 0em;
+	padding-right: 0px;
+}
+div#header ul#toprow-login li {
+	border-left: 1px #dddddd solid;
+}
+div#header ul#toprow-nav {
+	left: 0em;
+	padding-left: 0px;
+}
+div#header ul#toprow-nav li {
+	border-right: 1px #dddddd solid;
+}
+div#header ul.toprow {
+	clear: both;
+	font-family: sans-serif;
+	list-style: none;
+	position: absolute;
+	top: -1em;
+	width: auto;
+}
+div#header ul.toprow li {
+	//border-left: 1px #999999 solid;
+	//border-right: 1px #999999 solid;
+	float: left;
+	height: 1.8em;
+	line-height: 190%;
+	//padding-left: 0.2em;
+	//padding-right: 0.2em;
+	text-align: center;
+}
+div#header ul.toprow li.no-link {
+	padding-left: 0.7em;
+	padding-right: 0.7em;
+}
+div#header ul.toprow li a {
+	color: blue;
+	padding-bottom: 0.3em;
+	padding-left: 0.7em;
+	padding-right: 0.7em;
+	padding-top: 0.4em;
+	text-decoration: none;
+}
+div#header ul.toprow li a:hover {
+	background: #fffcf0;
+	//text-decoration: underline;
+}
+form div.submit-buttons {
+	padding-top: 0.5em;
+}
+form div.submit-buttons input.save-wiki {
+	position: relative;
+	left: 1em;
+}
+form div.submit-buttons input.reset-wiki {
+	position: absolute;
+	right: 0.9em;
+}
+form fieldset#new-tags-container {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	font-size: 175%;
+	margin-bottom: 0.3em;
+	margin-left: -0.1em;
+	margin-right: -0.1em;
+	margin-top: 0.5em;
+}
+h2 {
+	font-size: 125%;
+	margin-bottom: 0.3em;
+	margin-left: -0.1em;
+	margin-right: -0.1em;
+	padding-top: 0.0em;
+}
+input.specify-new-tags, input.wiki-change-descr {
+	background: #fffff6;
+}
+input.specify-new-tags {
+	margin-bottom: 0.1em;
+	width: 24em;
+}
+input.wiki-change-descr {
+	margin-bottom: 0.1em;
+	margin-top: 0.4em;
+	width: 55%;
+}
+label.title {
+	font-family: sans-serif;
+	font-size: 92%;
+	font-weight: bold;
+}
+label.help-info {
+	color: #666666;
+	display: block;
+	font-size: 75%;
+	margin-left: 0.5em;
+}
+label.help-info code {
+	font-size: 115%;
+}
+p.wiki-area-message, p.tags-message {
+	border: 1px dotted #999999;
+	font-family: sans-serif;
+	font-size: 95%;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+	margin-top: 0em;
+	padding: 0.2em;
+	text-align: center;
+}
+p.message-error {
+	background: #ff9999;
+}
+p.message-no-change {
+	background: #cceeff;
+}
+p.message-preview {
+	background: #fcd966;
+}
+p.message-reset {
+	background: #cceeff;
+}
+p.message-saved {
+	background: #88ff66;
+}
+span.message-error {
+	background: #ff9999;
+}
+.html-rendered-wiki {
+	background: white;
+	//background: #fcfcfc;
+	border-bottom: 2px solid #f0f0f0;
+	border-left: 2px solid #717171;
+	border-right: 2px solid #f0f0f0;
+	border-top: 2px solid #717171;
+	margin-bottom: 0.8em;
+	margin-top: 0;
+}
+div.html-rendered-wiki {
+	font-family: sans-serif;
+    font-size: 85%;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+div.html-rendered-wiki a {
+}
+div.html-rendered-wiki a:hover {
+	background: #f0f9ff;
+}
+div.html-rendered-wiki a.wiki-not-found {
+	border-bottom: 1px dotted red;
+	color: red;
+	text-decoration: none;
+}
+div.html-rendered-wiki ol {
+	margin-bottom: 0em;
+	margin-top: 0em;
+	padding-bottom: 0.5em;
+	padding-left: 2em;
+	padding-top: 0.5em;
+}
+div.html-rendered-wiki ol ol, div.html-rendered-wiki ol ul {
+	padding-top: 0;
+}
+div.html-rendered-wiki p {
+	margin-bottom: 0em;
+	margin-top: 0em;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+}
+div.html-rendered-wiki ul {
+	margin-bottom: 0em;
+	margin-top: 0em;
+	padding-bottom: 0.5em;
+	padding-left: 2em;
+	padding-top: 0.5em;
+}
+div.html-rendered-wiki ul ol, div.html-rendered-wiki ul ul {
+	padding-top: 0;
+}
+fieldset.stand-alone {
+	margin-left: 0em;
+	margin-right: 0em;
+	padding-bottom: 2px;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-top: 2px;
+}
+pre.html-rendered-wiki {
+	padding: 0.5em;
+}
+span.filename {
+	font-family: monospace;
+	font-size: 120%;
+}
+textarea.large {
+	background: #fffff6;
+	border-bottom: 2px solid #f0f0f0;
+	border-left: 2px solid #717171;
+	border-right: 2px solid #f0f0f0;
+	border-top: 2px solid #717171;
+	height: 20em;
+	width: 100%;
+}
+table.bib-summary {
+	font-family: sans-serif;
+	font-size: 96%;
+}
+table.bib-summary td ul li {
+	margin-left: -1em;
+}
+table.bib-summary td.summary-key {
+	font-weight: bold;
+	padding-left: 0.5em;
+	padding-right: 1em;
+	text-align: right;
+	vertical-align: top;
+}
+table.bib-summary td.summary-value {
+	padding: 0.05em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+table.bib-summary td.summary-value ul {
+	margin-bottom: 0em;
+}
+table.bib-summary tr#booktitle td.summary-value {
+	font-size: 90%;
+}
+table.bib-summary tr#journal td.summary-value {
+	font-size: 90%;
+}
+table.bib-summary tr#title td.summary-value span.words {
+	background: #ffff66;
+	font-size: 110%;
+	//font-weight: bold;
+	margin-left: -0.3em;
+	padding: 0.15em;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+}
+ul.ids-with-titles {
+	border: 1px solid #999999;
+	list-style: none;
+	margin-right: 0.0em;
+	margin-top: 0em;
+	padding-left: 0em;
+}
+ul.ids-with-titles a:visited {
+	color: blue;
+}
+ul.ids-with-titles li {
+	background: #f0f9ff;
+	border-bottom: 1px solid #d6d6d6;
+	border-right: 1px solid #d6d6d6;
+	border-top: 1px solid #fefefe;
+	padding-bottom: 2px;
+	padding-left: 0.5em;
+	padding-top: 4px;
+}
+ul.ids-with-titles li a {
+	padding-bottom: 1px;
+	//padding-left: 2px;
+	//padding-right: 2px;
+	padding-top: 1px;
+	text-decoration: none;
+}
+ul.ids-with-titles li a.cite-key {
+	font-size: 110%;
+}
+ul.ids-with-titles li a.cite-key:hover {
+	//background: white;
+	//border-bottom: 1px dotted #dddddd;
+	//border-top: 1px dotted #dddddd;
+	text-decoration: underline;
+}
+ul.ids-with-titles span.attrs {
+	color: #666666;
+	font-family: sans-serif;
+	font-size: 70%;
+}
+ul.ids-with-titles span.attrs a {
+	color: #555555;
+}
+ul.ids-with-titles span.attrs a:hover {
+	color: black;
+	text-decoration: underline;
+}
+ul.ids-with-titles span.attrs span.warning-absent {
+	color: red;
+	font-weight: bold;
+}
+ul.ids-with-titles span.attrs span.warning-absent a {
+	color: #995500;
+}
+ul.ids-with-titles span.attrs span.warning-absent a:hover {
+	color: black;
+}
+ul.form-items {
+	list-style-type: none;
+	margin-left: -2em;
+	margin-top: 0.5em;
+}
+ul.form-items li:hover {
+	// TODO: Add some JavaScript so you can check the checkbox whenever
+	// the mouse is hovering over the <li>.
+	// TODO: Add some JavaScript so that the <li> turns pink if you've
+	// changed a checkbox value, but not saved it yet.
+	//background: yellow;
+}
+ul.form-items li a {
+	font-size: 90%;
+	vertical-align: 15%;
+}

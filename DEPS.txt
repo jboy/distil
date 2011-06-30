@@ -1,0 +1,33 @@
+Library Dependencies:
+---------------------
+
+ * Tornado
+    http://www.tornadoweb.org/
+
+   License: Apache License, Version 2.0
+    http://www.apache.org/licenses/LICENSE-2.0
+   This license is LGPLv3 & GPLv3 compatible
+    http://www.gnu.org/licenses/license-list.html#apache2
+
+ * bibliograph.parsing
+    http://pypi.python.org/pypi/bibliograph.parsing/1.0.0
+ * bibliograph.rendering
+    http://pypi.python.org/pypi/bibliograph.rendering/1.0.2
+
+   License: Zope Public License (ZPL) 2.1
+    http://www.zope.org/Resources/License/
+   This license is GPL compatible
+    http://www.gnu.org/licenses/license-list.html#Zope20
+
+ * Unidecode
+    http://pypi.python.org/pypi/Unidecode/0.04.6
+
+   License: Perl License (can choose GPL or Artistic License)
+    http://dev.perl.org/licenses/
+   This license is GPL compatible (since you can choose to apply the GPL)
+    http://www.gnu.org/licenses/license-list.html#PerlLicense
+
+Note that Distil does not include any source code from these libraries, so
+none of these libraries have any effect upon the license under which Distil
+may be distributed.
+

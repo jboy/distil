@@ -1,0 +1,42 @@
+<div id="{{ div_id }}" class="wiki-area">
+
+	{% if message %}
+		<p class="wiki-area-message {{ message_class }}">{{ escape(message) }}</p>
+	{% end %}
+
+	{% if wiki_markup_error %}
+		{% comment I know that the formatting of this code is ugly, %}
+		{% comment but it's necessary to get the line-breaks correct in the <pre> output. %}
+		<pre class="html-rendered-wiki">{% for line in wiki_markup_error[0] %}
+				{{ escape(line) }}{% end %}
+			{{ escape(wiki_markup_error[1]) }}<span class="{{ message_class }}"
+					>{{ escape(wiki_markup_error[2]) }}</span>{{ escape(wiki_markup_error[3]) }}{% for line in wiki_markup_error[4] %}
+				{{ escape(line) }}{% end %}
+		</pre>
+	{% elif wiki_raw %}
+		<div class="html-rendered-wiki">
+			{% for line in wiki_html %}
+				{{ line }}{% end %}
+		</div>
+	{% end %}
+
+	<div>
+		<textarea class="large" name="{{ wiki_area_name }}">
+			{{ escape(wiki_raw) }}
+		</textarea>
+	</div>
+
+	<div>
+		<label class="title" for="{{ wiki_area_name }}-change-descr">Describe this change (optional):</label>
+		<input class="wiki-change-descr" type="text" name="{{ wiki_area_name }}-change-descr"
+		  id="{{ wiki_area_name }}-change-descr" value="{{ escape(wiki_change_descr) }}" />
+	</div>
+
+	<div class="submit-buttons">
+		<input type="submit" name="submit-button" value="Preview {{ wiki_area_title }}" class="preview-wiki" />
+		<input type="submit" name="submit-button" value="Save {{ wiki_area_title }}" class="save-wiki" />
+		<input type="submit" name="submit-button" value="Reset {{ wiki_area_title }}" class="reset-wiki" />
+	</div>
+
+</div>
+

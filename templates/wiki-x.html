@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ escape(title) }}</h1>
+
+{% comment This whole page is a single form, to enable the user to save some fields while retaining unsaved changes to others %}
+<form method="post" action="/wiki/{{ escape(wiki_word) }}">
+{{ xsrf_form_html() }}
+
+{{ modules.WikiArea(text_params) }}
+
+</form>
+
+{% end %}
+

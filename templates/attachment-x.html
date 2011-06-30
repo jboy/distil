@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1><span class="filename">{{ escape(title) }}</span></h1>
+
+{% comment This whole page is a single form, to enable the user to save some fields while retaining unsaved changes to others %}
+<form method="post" action="/attachment/{{ escape(dirname) }}">
+{{ xsrf_form_html() }}
+
+<div id="bib-summary-container">
+
+	<table class="bib-summary" id="title-author-year">
+
+		<tr><td class="summary-key">Description</td>
+			<td class="summary-value">{{ escape(descr) }}</td></tr>
+
+		<tr><td class="summary-key">Source URL</td>
+			<td class="summary-value"><a href="{{ escape(source_url) }}">{{ escape(source_url) }}</a></td></tr>
+
+		<tr><td class="summary-key">Download File</td>
+			<td class="summary-value">
+					<a href="{{ static_path }}">{{ fsize }}{% if ftype %} {{ ftype }}{% end %}</a>
+		</td></tr>
+	</table>
+
+</div>
+
+
+</form>
+
+{% end %}
+

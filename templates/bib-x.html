@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ escape(title) }}</h1>
+
+{% comment This whole page is a single form, to enable the user to save some fields while retaining unsaved changes to others %}
+<form method="post" action="/bib/{{ escape(cite_key) }}">
+{{ xsrf_form_html() }}
+
+<div id="bib-summary-container">
+
+	<table class="bib-summary" id="title-author-year">
+
+		<tr id="title"><td class="summary-key">Title</td>
+			<td class="summary-value"><span class="words">{{ escape(bib_entries["title"]) }}</span></td></tr>
+
+		<tr>
+		{% if len(bib_entries["authors"]) > 1 %}
+			<td class="summary-key">Authors</td>
+			<td class="summary-value">
+				<ul>
+				{% for author in bib_entries["authors"] %}
+					<li>{{ escape(author["lastname"]) }},
+						{{ escape(author["firstname"]) }}
+						{{ escape(author["middlename"]) }}</li>
+				{% end %}
+				</ul>
+		{% elif len(bib_entries["authors"]) == 1 %}
+			<td class="summary-key">Author</td>
+			<td class="summary-value">
+				{{ escape(bib_entries["authors"][0]["lastname"]) }},
+				{{ escape(bib_entries["authors"][0]["firstname"]) }}
+				{{ escape(bib_entries["authors"][0]["middlename"]) }}
+		{% else %}
+			<td class="summary-key">Author</td>
+			<td class="summary-value">
+		{% end %}</td></tr>
+
+		<tr><td class="summary-key">Year</td>
+			<td class="summary-value">{{ escape(bib_entries["year"]) }}</td></tr>
+
+		{% if bib_entries.has_key("journal") %}
+			<tr id="journal"><td class="summary-key">Journal</td>
+				<td class="summary-value">{{ escape(bib_entries["journal"]) }}</td></tr>
+		{% end %}
+
+		{% if bib_entries.has_key("booktitle") %}
+			<tr id="booktitle"><td class="summary-key">Book Title</td>
+				<td class="summary-value">{{ escape(bib_entries["booktitle"]) }}</td></tr>
+		{% end %}
+
+		<tr><td class="summary-key">Document</td>
+			<td class="summary-value">
+				{% if doc_attrs.has_key("doc-type") %}
+					<a href="{{ escape(doc_attrs['doc-path']) }}"
+						>View {{ escape(doc_attrs['doc-type']) }}</a>
+					{% else %}
+						<span class="warning-absent">None</span>
+					{% end %}
+		</td></tr>
+	</table>
+
+</div>
+
+<h2><a id="topic-tags-section">Topic tags</a></h2>
+
+<div id="edit-topic-tags">
+
+	{% if tags_message %}
+		<p class="tags-message {{ tags_message_class }}">{{ escape(tags_message) }}</p>
+	{% end %}
+
+	{% comment We want to split one <ul> into three <ul> columns of approx equal length. %}
+	{% comment See http://www.alistapart.com/articles/multicolumnlists/ for explanation. %}
+	<div class="column-container">
+
+		<ul class="form-items" id="col-1">
+		{% for tag, checked in tags[:(len(tags)+3) / 4] %}
+			<li><input type="checkbox" name="tag" value="{{ escape(tag) }}"
+				{% if checked %} checked="True" {% end %} />
+				<a href="/tag/{{ escape(tag) }}">{{ escape(tag) }}</a></li>
+		{% end %}
+		</ul>
+
+		<ul class="form-items" id="col-2">
+		{% for tag, checked in tags[(len(tags)+3) / 4 : 2 * ((len(tags)+3) / 4)] %}
+			<li><input type="checkbox" name="tag" value="{{ escape(tag) }}"
+				{% if checked %} checked="True" {% end %} />
+				<a href="/tag/{{ escape(tag) }}">{{ escape(tag) }}</a></li>
+		{% end %}
+		</ul>
+
+		<ul class="form-items" id="col-3">
+		{% for tag, checked in tags[2 * ((len(tags)+3) / 4) : 3 * ((len(tags)+3) / 4)] %}
+			<li><input type="checkbox" name="tag" value="{{ escape(tag) }}"
+				{% if checked %} checked="True" {% end %} />
+				<a href="/tag/{{ escape(tag) }}">{{ escape(tag) }}</a></li>
+		{% end %}
+		</ul>
+
+		<ul class="form-items" id="col-4">
+		{% for tag, checked in tags[3 * ((len(tags)+3) / 4):] %}
+			<li><input type="checkbox" name="tag" value="{{ escape(tag) }}"
+				{% if checked %} checked="True" {% end %} />
+				<a href="/tag/{{ escape(tag) }}">{{ escape(tag) }}</a></li>
+		{% end %}
+		</ul>
+
+		{% comment This line-break is used to "stop the float". %}
+		<br />
+
+	</div>
+
+	<fieldset id="new-tags-container">
+		<label class="title" for="new-tags">Add new tags:</label>
+		<input class="specify-new-tags" type="text" name="new-tags" id="new-tags" value="{{ new_tags }}" />
+
+		<label class="help-info" for="new-tags">Separate multiple tags by commas or whitespace.
+		Tags are case-insensitive.<br />All punctuation other than hyphen, underscore, period
+		and colon will be removed.<br />Use a single colon to indicate a namespace for a tag
+		(for example, &ldquo;<code>namespace:tag</code>&rdquo;).</label>
+	</fieldset>
+
+	<div class="submit-buttons">
+		<input type="submit" name="submit-button" value="Save Tags" />
+	</div>
+
+</div>
+
+<h2><a id="notes-section">Notes</a></h2>
+
+{{ modules.WikiArea(notes_params) }}
+
+{% if abstract %}
+	<h2><a id="abstract-section">Abstract</a></h2>
+
+	<div id="edit-abstract">
+		<p>{{ abstract }}</p>
+	</div>
+{% end %}
+
+</form>
+
+{% end %}
+

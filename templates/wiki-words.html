@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ escape(title) }}</h1>
+<ul class="ids-with-titles">
+{% for item in items %}
+	<li><a href="/wiki/{{ escape(item) }}" class="cite-key">{{ escape(item) }}</a></li>
+{% end %}
+</ul>
+
+{% end %}
+

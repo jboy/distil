@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>{{ escape(title) }} &mdash; distil</title>
+		<link rel="stylesheet" href="{{ static_url('css/desktop.css') }}" type="text/css" media="screen" />
+		<link rel="stylesheet" href="{{ static_url('css/print.css') }}" type="text/css" media="print" />
+		<link rel="icon" href="{{ static_url('images/conical-flask-favicon.png') }}" type="image/png" />
+	</head>
+
+	<body>
+		<div id="header">
+			<ul class="toprow" id="toprow-nav">
+				<li><a href="/">Distil</a></li>
+				<li><a href="/ids-with-titles">Cite Keys</a></li>
+				<li><a href="/wiki-words">Wiki Words</a></li>
+				<li><a href="/attachments">Attachments</a></li>
+			</ul>
+			<ul class="toprow" id="toprow-login">
+				<li><a href="{{ request.path }}{% if request.query %}?{{ request.query }}{% end %}">Refresh</a></li>
+				<li class="no-link">Signed in as <b>{{ current_user }}</b></li>
+				<li><a href="/logout">Sign Out</a></li>
+			</ul>
+		</div>
+		<div id="enclose-body">
+			{% block body %}
+			{% end %}
+			<div id="footer">
+				<p><a href="http://sourceforge.net/projects/distil/">Distil</a>
+				is Copyright &copy; 2011 <a href="http://www.jboy.id.au">James Boyden</a>.
+				Licensed for distribution under the terms of the
+				<a href="http://www.gnu.org/licenses/gpl-3.0.html">GPL</a>.</p>
+			</div>
+		</div>
+	</body>
+</html>
+

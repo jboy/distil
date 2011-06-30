@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Page {{ escape(title) }} not found</h1>
+
+<form method="post" action="/wiki/{{ escape(wiki_word) }}">
+	{{ xsrf_form_html() }}
+
+	<input type="submit" name="submit-button" value="Create Page" id="create-page" />
+</form>
+
+{% end %}
+

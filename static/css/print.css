@@ -1,0 +1,39 @@
+body {
+	font-size: 90%;
+}
+div.html-rendered-wiki a.wiki-not-found {
+	border-bottom: 1px dotted red;
+	color: red;
+	text-decoration: none;
+}
+div#footer {
+	border-top: black solid 1px;
+	color: #111111;
+	font-size: 90%;
+	margin-top: 2em;
+	width: 100%;
+}
+div#footer p a {
+	color: #111111;
+}
+div#header {
+	display: none;
+}
+form div.submit-buttons {
+	display: none;
+}
+form textarea {
+	display: none;
+}
+h1 {
+	font-size: 160%;
+}
+h2 {
+	font-size: 135%;
+}
+input {
+	display: none;
+}
+label {
+	display: none;
+}

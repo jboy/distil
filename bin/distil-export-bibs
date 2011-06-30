@@ -1,0 +1,8 @@
+#!/bin/sh
+# A simple wrapper shell script to specify the path to the export-bibs command.
+# This shell script can be copied into a standard "bin" directory.
+
+# Edit this variable to specify the abspath to the Distil installation.
+DISTIL=/home/jboy/dev/distil/code
+
+python ${DISTIL}/export_bibs_command.py "$@"

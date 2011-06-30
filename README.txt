@@ -30,3 +30,21 @@ only one bib-entry per invocation, and so will expect each BibTeX file
 to contain only a single bib-entry.  Note also that when the specified
 files are imported, they will be moved rather than copied.
 
+7. The currently-supported wiki markup is a (slightly-extended) subset
+of the Trac wiki syntax.  In particular:
+ * = First-level Heading =
+ * == Second-level Heading ==
+ * === Third-level Heading ===
+ * A paragraph is a sequence of lines of text, ended by an empty line
+ * A bullet-point is a space followed by an asterisk (" *")
+   * Indent the space-asterisk by 2 extra spaces for a sub-point
+     * And so on...
+ * A numbered item is a space followed by a digit and a period (" 1.")
+   1. Similarly with the 2 extra spaces for a sub-item
+ * A wiki word is created using [square brackets]
+   * Wiki words are case-insensitive (they will be converted to lower)
+   * Spaces are allowed (they will be converted to hyphens)
+ * Cite another bib in Distil using [cite:the-cite-key-of-the-bib]
+ * **bold text** (currently must be completely on a single line, alas)
+ * //italicised text// (again, currently must be on a single line)
+

@@ -1,0 +1,10 @@
+= 0.1 (2011-06-30) =
+
+Initial public release.
+
+= 0.1.1 (2011-06-30) =
+
+ * Bugfixes to 0.1 (which didn't work properly as a fresh installation) after
+   alpha-testing by Dominic Balasuriya.  Thanks Dom!
+ * A few quick work-arounds, to run on the newly-released Tornado 2.0.
+

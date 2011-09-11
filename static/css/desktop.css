@@ -16,6 +16,9 @@ div.cite-key-title {
 	padding-bottom: 0px;
 	padding-top: 2px;
 }
+div.cite-key-title span.authors {
+	font-size: 85%;
+}
 // See http://www.alistapart.com/articles/multicolumnlists/ for explanation.
 // "float the sub-lists side by side, then clear the float after the final column"
 div.column-container {

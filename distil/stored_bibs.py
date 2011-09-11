@@ -203,6 +203,8 @@ def get_doc_attrs(cite_key, doc_fname_startswith=None):
   multiple_bib_entries = bibfile_utils.read_entries_from_file(bib_fname_abspath, False)
   # FIXME:  Should check that length of 'multiple_bib_entries' is exactly 1.
 
+  authors = multiple_bib_entries[0]["authors"]
+  doc_attrs["author-lastnames"] = [author["lastname"] for author in authors]
   doc_attrs["title"] = multiple_bib_entries[0]["title"]
   doc_attrs["year-published"] = multiple_bib_entries[0]["year"]
   #doc_attrs["title"] = ""

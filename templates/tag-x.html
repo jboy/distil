@@ -30,7 +30,8 @@
 	{% end %}
 
 	<div class="cite-key-title">
-	{{ escape(attrs['title']) }}
+	{{ escape(attrs['title']) }} &mdash;
+	  <span class="authors">{{ escape(", ".join(attrs['author-lastnames'])) }}</span>
 	</div>
 
 	<div class="list-topic-tags">

@@ -26,6 +26,7 @@ import itertools
 
 from xml.sax.saxutils import escape as xml_escape
 
+import attachments
 import config
 import constants
 import unicode_string_utils
@@ -305,6 +306,26 @@ def make_cite(obj):
 
   return '<a class="%s" href="%s">%s</a>' % (link_class, make_url(cite_key), cite_key)
 
+
+def make_attach(obj):
+  def exists(a):
+    a_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.ATTACHMENTS_SUBDIR, a)
+    return (os.path.exists(a_dir_abspath), a_dir_abspath)
+
+  def make_url(a):
+    return '/attachment/' + a
+
+  attachment = obj.group('text')
+  (e, a) = exists(attachment)
+  if e:
+    link_class = "wiki-normal"
+    visible_text = attachments.get_attachment_attrs(a)[0]
+  else:
+    link_class = "wiki-not-found"
+    visible_text = attachment
+
+  return '<a class="%s" href="%s">%s</a>' % (link_class, make_url(attachment), visible_text)
+
 # See http://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
 # and http://tools.ietf.org/html/rfc3986#section-2.2
 # In theory, colons are also a problem, but I intend to handle them specially later
@@ -355,6 +376,9 @@ RECOGNISED_MARKUP = [
 
   # A minor extension of the Trac syntax, to support citations to other entries.
   (re.compile(r'\[cite:(?P<text>.+?)\]', re.I), make_cite),
+
+  # A minor extension of the Trac syntax, to support references to attachments.
+  (re.compile(r'\[attach:(?P<text>.+?)\]', re.I), make_attach),
 
   # A minor extension of the Trac syntax, to support wiki-links.
   (re.compile(r'\[(?P<text>.+?)\]', re.I), make_wikilink),

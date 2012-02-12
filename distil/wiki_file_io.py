@@ -23,7 +23,23 @@ import time
 
 import config
 import constants
+import filesystem_utils
 import repository
+
+
+def create_wiki_page(wiki_subdir_abspath, wiki_word):
+  """Ensure the wiki-word directory and wiki-word file exist.
+  
+  Will also create the wiki-subdir if it doesn't already exist.
+  """
+  wiki_word_dir_abspath = os.path.join(wiki_subdir_abspath, wiki_word)
+  os.makedirs(wiki_word_dir_abspath)
+
+  wiki_fname_abspath = os.path.join(wiki_word_dir_abspath, wiki_word + constants.WIKI_FNAME_SUFFIX)
+  filesystem_utils.create_empty_file(wiki_fname_abspath)
+  repository.add(wiki_fname_abspath)
+  repository.commit([wiki_fname_abspath],
+      "created wiki page '%s'" % wiki_word)
 
 
 def update_notes_for_cite_key(cite_key, notes, change_descr):

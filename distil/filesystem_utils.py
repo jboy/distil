@@ -153,6 +153,13 @@ def ensure_dir_exists(dir_abspath):
     os.makedirs(dir_abspath)
 
 
+def create_empty_file(fname):
+  """A convenience function to ensure a file is closed and flushed to disk
+  before any other operations (like a Git add) occur.
+  """
+  f = open(fname, 'w')
+
+
 ### Anything below this point is not part of the exported API.
 
 

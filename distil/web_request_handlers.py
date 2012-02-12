@@ -35,7 +35,6 @@ import config
 import constants
 import filesystem_utils
 import form_button_actions
-import repository
 import stored_bibs
 import topic_tag_file_io
 import wiki_file_io
@@ -460,14 +459,7 @@ class WikiXHandler(BaseHandler):
     
     Will also create the wiki-subdir if it doesn't already exist.
     """
-    wiki_word_dir_abspath = os.path.join(self.wiki_subdir_abspath, wiki_word)
-    os.makedirs(wiki_word_dir_abspath)
-
-    wiki_fname_abspath = os.path.join(wiki_word_dir_abspath, wiki_word + constants.WIKI_FNAME_SUFFIX)
-    create_empty_file(wiki_fname_abspath)
-    repository.add(wiki_fname_abspath)
-    repository.commit([wiki_fname_abspath],
-        "created wiki page '%s'" % wiki_word)
+    wiki_file_io.create_wiki_page(self.wiki_subdir_abspath, wiki_word)
 
 
 class WikiWordsHandler(BaseHandler):
@@ -491,11 +483,4 @@ def format_wiki_markup_errors(e, wiki_input_lines):
       (wiki_input_lines[:e.line_num - 1],  # Don't forget that the line_num starts at 1, not 0.
       before_erroneous_text, erroneous_text, after_erroneous_text,
       wiki_input_lines[e.line_num:]))  # Don't forget that the line_num starts at 1, not 0.
-
-
-def create_empty_file(fname):
-  """A convenience function to ensure a file is closed and flushed to disk
-  before any other operations (like a Git add) occur.
-  """
-  f = open(fname, 'w')
 

@@ -2,6 +2,15 @@
 {% block body %}
 
 <h1>{{ escape(title) }}</h1>
+
+<form method="post" action="/wiki-create">
+	{{ xsrf_form_html() }}
+
+	<label for=wiki-word">Create a new wiki page:</label>
+	<input type="text" name="wiki-word" id="wiki-word" />
+	<input type="submit" name="submit-button" value="Create" id="create-page" />
+</form>
+
 <ul class="ids-with-titles">
 {% for item in items %}
 	<li><a href="/wiki/{{ escape(item) }}" class="cite-key">{{ escape(item) }}</a></li>

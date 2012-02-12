@@ -48,6 +48,7 @@ HANDLERS = [
   (r"/bib/([a-z0-9-]+)",            web_request_handlers.BibXHandler),
   (r"/tag/([a-z0-9-_+.:]+)",        web_request_handlers.TagXHandler),
   (r"/wiki-words",                  web_request_handlers.WikiWordsHandler),
+  (r"/wiki-create",                 web_request_handlers.WikiCreateHandler),
   (r"/wiki/([a-z0-9-_+.:]+)",       web_request_handlers.WikiXHandler),
 ]
 

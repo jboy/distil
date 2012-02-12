@@ -326,6 +326,7 @@ def make_attach(obj):
 
   return '<a class="%s" href="%s">%s</a>' % (link_class, make_url(attachment), visible_text)
 
+
 # See http://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
 # and http://tools.ietf.org/html/rfc3986#section-2.2
 # In theory, colons are also a problem, but I intend to handle them specially later
@@ -335,9 +336,13 @@ ALLOWED_PUNCTUATION = "-_.:"
 STRIP_PUNCTUATION_AND_WHITESPACE = \
     unicode_string_utils.StripPunctuationAndWhitespace(ALLOWED_PUNCTUATION)
 
+def normalise_string_for_wiki_word(s):
+  return STRIP_PUNCTUATION_AND_WHITESPACE(unicode(s.lower().replace(' ', '-')))
+
+
 def make_wikilink(obj):
   def normalise(ww):
-    return STRIP_PUNCTUATION_AND_WHITESPACE(unicode(ww.lower().replace(' ', '-')))
+    return normalise_string_for_wiki_word(ww)
 
   def exists(ww):
     ww_fname_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.WIKI_SUBDIR, ww)

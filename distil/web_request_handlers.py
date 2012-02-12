@@ -436,6 +436,7 @@ class WikiXHandler(BaseHandler):
 
   @tornado.web.authenticated
   def post(self, wiki_word):
+    wiki_word = wiki_markup.normalise_string_for_wiki_word(wiki_word)
     args_to_pass_to_render_page = WikiXHandler.defaultdict_render_page_args.copy()
     submit_buttons = {
       "Create Page": self.create_wiki_page,
@@ -455,6 +456,38 @@ class WikiXHandler(BaseHandler):
     self.render_page(wiki_word, args_to_pass_to_render_page)
 
   def create_wiki_page(self, handler, wiki_word, render_page_args):
+    """Ensure the wiki-word directory and wiki-word file exist.
+    
+    Will also create the wiki-subdir if it doesn't already exist.
+    """
+    wiki_file_io.create_wiki_page(self.wiki_subdir_abspath, wiki_word)
+
+
+class WikiCreateHandler(BaseHandler):
+  @tornado.web.authenticated
+  def post(self):
+    page_name_specified = self.get_argument("wiki-word", default="")
+    wiki_word = wiki_markup.normalise_string_for_wiki_word(page_name_specified)
+    if not wiki_word:
+      self.redirect("/wiki-words")
+    else:
+      submit_buttons = {
+        "Create": self.create_wiki_page,
+      }
+      submit_button_pressed = self.get_submit_button_pressed()
+      if submit_button_pressed:
+        try:
+          # FIXME:  Convert unsafe arbitrary text to a safe wiki-word.
+          submit_buttons[submit_button_pressed](self, wiki_word)
+          self.redirect("/wiki/%s" % wiki_word)
+        except KeyError as e:
+          # There is a new submit button which we need to add to the 'submit_buttons' dictionary.
+          sys.stderr.write("Error in %s, class %s: unhandled submit button '%s'" %
+              (__file__, self.__class__.__name__, submit_button_pressed))
+      else:
+        self.redirect("/wiki-words")
+
+  def create_wiki_page(self, handler, wiki_word):
     """Ensure the wiki-word directory and wiki-word file exist.
     
     Will also create the wiki-subdir if it doesn't already exist.

@@ -499,8 +499,7 @@ class WikiWordsHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self):
     filesystem_utils.ensure_dir_exists(self.wiki_subdir_abspath)
-    basenames_and_suffices = [fname.rpartition(".") for fname in os.listdir(self.wiki_subdir_abspath)]
-    titles = [basename if basename else suffix for (basename, period, suffix) in basenames_and_suffices]
+    titles = os.listdir(self.wiki_subdir_abspath)
     titles.sort()
 
     self.render("wiki-words.html", title="Wiki Words", items=titles)

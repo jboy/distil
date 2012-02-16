@@ -3,21 +3,27 @@
 
 	<div class="create-attachment-form">
 
+		{% if error_msg %}
+		<p class="message-error">{{ error_msg }}</p>
+		{% end %}
+
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=filename">Name of file on disk:</label>
-				<span class="required-form-field">*</span><br />
-			<input type="text" name="filename" id="filename" size="40" />
+				<span class="required-form-field">*</span>
+				<label class="help-info" for="dirpath">This can be the name of a file on disk, or the URL of a remote file.</label>
+			<input type="text" name="filename" id="filename" size="80" />
 		</fieldset>
 
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=dirpath">Directory path to file:</label>
-				<label class="help-info" for="dirpath">if the file is not in ~/Downloads, ~/Desktop or ~ (which will be searched in that order).</label>
+				<label class="help-info" for="dirpath">... if the filename specified above is not a URL and is not in any of ~/Downloads/, ~/Desktop/ or ~/
+					<br />(which will be searched in that order).</label>
 			<input type="text" name="dirpath" id="dirpath" size="80" />
 		</fieldset>
 
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=new-filename">New name for file:</label>
-				<label class="help-info" for="new-filename">if you want to change the filename that will be shown in the list below.
+				<label class="help-info" for="new-filename">... if you want to change the filename that will be shown in the list below.
 					<br />Attachment filenames don't need to be unique, but informative names are recommended
 					<br />and the filename suffix will be used to determine the file type.</label>
 			<input type="text" name="new-filename" id="new-filename" size="40" />
@@ -30,6 +36,7 @@
 
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=source-url">Original source URL of file:</label><br />
+				<label class="help-info" for="dirpath">The URL of the web-page on which you found the file.</label>
 			<input type="text" name="source-url" id="source-url" size="80" />
 		</fieldset>
 

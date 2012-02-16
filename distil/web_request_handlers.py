@@ -145,12 +145,7 @@ class LogoutHandler(BaseHandler):
 class AttachmentsHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self):
-    filesystem_utils.ensure_dir_exists(self.attachments_subdir_abspath)
-    all_attachment_dirnames = os.listdir(self.attachments_subdir_abspath)
-    attachments_with_attrs = [attachments.get_attachment_attrs(dirname) for dirname in all_attachment_dirnames]
-    attachments_with_attrs.sort()
-    self.render("attachments.html", title="Attachments", items=attachments_with_attrs,
-        create_attachment_form_params={ "post_action_url": "/attachments"})
+    self.render_page()
 
   def post(self):
     if not self.get_arguments("submit-button"):
@@ -158,13 +153,34 @@ class AttachmentsHandler(BaseHandler):
 
     fields = extract_attachment_form_fields(self)
     if not fields["filename"]:
+      # FIXME:  Re-populate the fields with the values passed in by the user.
       self.redirect("/attachments")
 
-    attachment_id = attachments.store_new_attachment_incl_dirpath(**fields)
-    if attachment_id:
+    try:
+      attachment_id = attachments.store_new_attachment_incl_dirpath(**fields)
       self.redirect("/attachment/%s" % attachment_id)
-    else:
-      self.redirect("/attachments")
+    except attachments.Error as e:
+      error_msg = str(e)
+      self.render_page(fields, error_msg)
+    except filesystem_utils.Error as e:
+      error_msg = str(e)
+      self.render_page(fields, error_msg)
+
+  def render_page(self, fields={}, error_msg=""):
+    attachments_with_attrs = self.get_attachments_with_attrs()
+    create_attachment_form_params = dict(
+        post_action_url="/attachments",
+        error_msg=error_msg
+    )
+    self.render("attachments.html", title="Attachments", items=attachments_with_attrs,
+        create_attachment_form_params=create_attachment_form_params)
+
+  def get_attachments_with_attrs(self):
+    filesystem_utils.ensure_dir_exists(self.attachments_subdir_abspath)
+    all_attachment_dirnames = os.listdir(self.attachments_subdir_abspath)
+    attachments_with_attrs = [attachments.get_attachment_attrs(dirname)
+        for dirname in all_attachment_dirnames]
+    return sorted(attachments_with_attrs)
 
 
 def extract_attachment_form_fields(calling_obj):

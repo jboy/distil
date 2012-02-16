@@ -24,6 +24,8 @@ import base64
 import ConfigParser
 import errno
 import os
+import shutil
+import urllib2
 import uuid
 
 import config
@@ -43,18 +45,60 @@ ATTACHMENT_IMPORT_SEARCH_LOCATIONS = [
 ]
 
 
+class Error(Exception):
+  """Base class for exceptions in this module."""
+  pass
+
+
+class CannotOpenURL(Error):
+  def __init__(self, url, http_error_code):
+    self.url = url
+    self.http_error_code = http_error_code
+  
+  def __str__(self):
+    return "Cannot open URL '%s' (HTTP error %s)" % (self.url, self.http_error_code)
+
+
+class FileNotFoundInDirectory(Error):
+  def __init__(self, fname, dirname):
+    self.fname = fname
+    self.dirname = dirname
+  
+  def __str__(self):
+    return "Cannot find file '%s' in directory '%s'" % (self.fname, self.dirname)
+
+
+class FileNotFoundInDirectorySearch(Error):
+  def __init__(self, fname, dirname_list):
+    self.fname = fname
+    self.dirname_list = dirname_list
+  
+  def __str__(self):
+    return "Cannot find file '%s' in directory search in [%s]" \
+        % (self.fname, ", ".join(self.dirname_list))
+
+
 # Don't change these parameter names, because we use double-asterisk
 # function invocation to pass parameters by name.
 def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", short_descr="", source_url=""):
-  if dirpath:
+  if filename.startswith("http://"):
+    # Be ready to handle 404s, etc.
+    try:
+      # Assume it's a URL to fetch.
+      url_contents = urllib2.urlopen(filename, 'rb')
+      (attachment_id, attachment_path) = \
+          store_new_attachment(filename, short_descr, source_url, new_filename, url_contents)
+      return attachment_id
+    except urllib2.HTTPError as e:
+      raise CannotOpenURL(filename, e.code)
+  elif dirpath:
     filename_incl_dirpath = os.path.join(dirpath, filename)
     if os.path.exists(filename_incl_dirpath):
       (attachment_id, attachment_path) = \
           store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
       return attachment_id
     else:
-      # FIXME:  Need better error messages
-      return None
+      raise FileNotFoundInDirectory(filename, dirpath)
   else:
     for loc in ATTACHMENT_IMPORT_SEARCH_LOCATIONS:
       location = os.path.expanduser(loc)
@@ -66,33 +110,53 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
         return attachment_id
 
     # Otherwise, no luck finding the named file in any of the search directories.
-    # FIXME:  Need better error messages
-    return None
+    raise FileNotFoundInDirectorySearch(filename, ATTACHMENT_IMPORT_SEARCH_LOCATIONS)
 
 
 ALLOWED_PUNCTUATION = "-_.:"
 STRIP_PUNCTUATION_AND_WHITESPACE = \
     unicode_string_utils.StripPunctuationAndWhitespace(ALLOWED_PUNCTUATION)
 
-
-def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fname=""):
+def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fname="",
+    url_contents=None):
   """Store a new attachment in the doclib."""
 
-  if not os.path.exists(attachment_fname):
+  if url_contents:
+    # The user specified a URL rather than the name of a file on disk.
+    # 'url_contents' is a file-like object that contains the contents of the URL.
+    # Hence, don't test whether the 'attachment_fname' file exists on disk.
+    pass
+  elif not os.path.exists(attachment_fname):
     raise filesystem_utils.FileNotFound(attachment_fname)
+
   if new_fname:
-    attachment_basename = STRIP_PUNCTUATION_AND_WHITESPACE(unicode(
-      new_fname.replace(' ', '-').replace('/', '-')))
+    # We'll use this as the filename instead.
+    target_fname = STRIP_PUNCTUATION_AND_WHITESPACE(unicode(
+        new_fname.replace(' ', '-').replace('/', '-')))
   else:
-    attachment_basename = os.path.basename(attachment_fname)
+    # I've checked that 'os.path.basename' also does the correct thing for URLs.
+    target_fname = os.path.basename(attachment_fname)
+
+  # Ensure the filename doesn't begin with a dot (which we reserve for
+  # book-keeping files like ".metadata").
+  target_fname = target_fname.lstrip('.')
+  if target_fname == "":
+    raise filesystem_utils.EmptyFilename()
 
   # Since different attachments may very well have duplicate filenames,
   # we store each attachment in a subdirectory with a "unique" dirname.
-  (dirname, dirname_abspath) = create_unique_dirname(attachment_basename)
+  (dirname, dirname_abspath) = create_unique_dirname(target_fname)
 
-  new_attachment_fname_abspath = \
-      filesystem_utils.move_and_rename(attachment_fname, dirname_abspath,
-          attachment_basename)
+  if url_contents:
+    # Save the URL contents into an appropriately-named file.
+    target_fname_abspath = os.path.join(dirname_abspath, target_fname)
+    target_f = open(target_fname_abspath, 'wb')
+    shutil.copyfileobj(url_contents, target_f)
+  else:
+    # We want to move a file on disk.
+    new_attachment_fname_abspath = \
+        filesystem_utils.move_and_rename(attachment_fname, dirname_abspath,
+            target_fname)
 
   config_sections = [
     ("Description", [
@@ -100,8 +164,8 @@ def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fn
       ("source-url", source_url),
     ]),
     ("Cache", [
-      ("filename", attachment_basename),
-      ("suffix", filesystem_utils.get_suffix(attachment_basename)),
+      ("filename", target_fname),
+      ("suffix", filesystem_utils.get_suffix(target_fname)),
     ]),
     ("Creation", [
       ("date-added", filesystem_utils.get_datestamp_str()),
@@ -109,7 +173,7 @@ def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fn
   ]
 
   filesystem_utils.write_config_file(config_sections, os.path.join(dirname_abspath, ".metadata"))
-  repository.add_and_commit_new_attachment_dir(attachment_basename, dirname)
+  repository.add_and_commit_new_attachment_dir(target_fname, dirname)
 
   return (dirname, dirname_abspath)
 

@@ -30,17 +30,59 @@ import config
 import constants
 import filesystem_utils
 import repository
+import unicode_string_utils
 
 
 ### These are the public functions of the exported API.
 
 
-def store_new_attachment(attachment_fname, short_descr="", source_url=""):
+ATTACHMENT_IMPORT_SEARCH_LOCATIONS = [
+    "~/Downloads",
+    "~/Desktop",
+    "~"
+]
+
+
+# Don't change these parameter names, because we use double-asterisk
+# function invocation to pass parameters by name.
+def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", short_descr="", source_url=""):
+  if dirpath:
+    filename_incl_dirpath = os.path.join(dirpath, filename)
+    if os.path.exists(filename_incl_dirpath):
+      (attachment_id, attachment_path) = \
+          store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
+      return attachment_id
+    else:
+      return None
+  else:
+    for loc in ATTACHMENT_IMPORT_SEARCH_LOCATIONS:
+      location = os.path.expanduser(loc)
+
+      filename_incl_dirpath = os.path.join(location, filename)
+      if os.path.exists(filename_incl_dirpath):
+        (attachment_id, attachment_path) = \
+            store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
+        return attachment_id
+
+    # Otherwise, no luck finding the named file in any of the search directories.
+    return None
+
+
+ALLOWED_PUNCTUATION = "-_.:"
+STRIP_PUNCTUATION_AND_WHITESPACE = \
+    unicode_string_utils.StripPunctuationAndWhitespace(ALLOWED_PUNCTUATION)
+
+
+def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fname=""):
   """Store a new attachment in the doclib."""
 
   if not os.path.exists(attachment_fname):
     raise filesystem_utils.FileNotFound(attachment_fname)
-  attachment_basename = os.path.basename(attachment_fname)
+  if new_fname:
+    attachment_basename = STRIP_PUNCTUATION_AND_WHITESPACE(unicode(
+      new_fname.replace(' ', '-').replace('/', '-')))
+  else:
+    attachment_basename = os.path.basename(attachment_fname)
 
   # Since different attachments may very well have duplicate filenames,
   # we store each attachment in a subdirectory with a "unique" dirname.

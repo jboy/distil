@@ -1,0 +1,23 @@
+<form method="post" action="{{ post_action_url }}">
+	{{ xsrf_form_html() }}
+
+	<label for=filename">Attach a file on disk:</label>
+		<span class="required-form-field">*</span><br />
+	<input type="text" name="filename" id="filename" size="40" /><br />
+
+	<label for=dirpath">Directory path to file:</label>
+		<small>(if not in ~/Downloads, ~/Desktop or ~, searched in that order)</small><br />
+	<input type="text" name="dirpath" id="dirpath" size="80" /><br />
+
+	<label for=new-filename">New name for file:</label>
+		<small>(if you want to change the name)</small><br />
+	<input type="text" name="new-filename" id="new-filename" size="40" /><br />
+
+	<label for=short-descr">Short description of attachment:</label><br />
+	<input type="text" name="short-descr" id="short-descr" size="80" /><br />
+
+	<label for=source-url">Original source URL of file:</label><br />
+	<input type="text" name="source-url" id="source-url" size="80" /><br />
+
+	<input type="submit" name="submit-button" value="Attach" id="attach-file" />
+</form>

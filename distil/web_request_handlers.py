@@ -148,7 +148,49 @@ class AttachmentsHandler(BaseHandler):
     all_attachment_dirnames = os.listdir(self.attachments_subdir_abspath)
     attachments_with_attrs = [attachments.get_attachment_attrs(dirname) for dirname in all_attachment_dirnames]
     attachments_with_attrs.sort()
-    self.render("attachments.html", title="Attachments", items=attachments_with_attrs)
+    self.render("attachments.html", title="Attachments", items=attachments_with_attrs,
+        create_attachment_form_params={ "post_action_url": "/attachments"})
+
+  def post(self):
+    if not self.get_arguments("submit-button"):
+      self.redirect("/attachments")
+
+    fields = extract_attachment_form_fields(self)
+    if not fields["filename"]:
+      self.redirect("/attachments")
+
+    attachment_id = attachments.store_new_attachment_incl_dirpath(**fields)
+    if attachment_id:
+      self.redirect("/attachment/%s" % attachment_id)
+    else:
+      self.redirect("/attachments")
+
+
+def extract_attachment_form_fields(calling_obj):
+  def extract_elem_from_list_if_present(the_list):
+    if len(the_list):
+      return the_list[0]
+    else:
+      return None
+
+  def convert_to_variable_name(s):
+    return s.replace('-', '_')
+
+  field_names = [
+      "filename",
+      "dirpath",
+      "new-filename",
+      "short-descr",
+      "source-url",
+  ]
+
+  extracted_form_fields = {}
+  for fn in field_names:
+    field_val = extract_elem_from_list_if_present(calling_obj.get_arguments(fn))
+    if field_val:
+      extracted_form_fields[convert_to_variable_name(fn)] = field_val
+
+  return extracted_form_fields
 
 
 class CiteKeyListBaseHandler(BaseHandler):

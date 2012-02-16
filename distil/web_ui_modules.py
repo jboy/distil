@@ -24,3 +24,8 @@ class WikiArea(tornado.web.UIModule):
   def render(self, params):
     return self.render_string("ui-module-wiki-area.html", **params)
 
+
+class CreateAttachmentForm(tornado.web.UIModule):
+  def render(self, params):
+    return self.render_string("ui-module-create-attachment-form.html", **params)
+

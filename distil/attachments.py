@@ -72,7 +72,7 @@ class CannotOpenURL(Error):
     self.http_error_code = http_error_code
   
   def __str__(self):
-    return "Cannot open URL '%s' (HTTP error %s)" % (self.url, self.http_error_code)
+    return "Cannot open the URL '%s' (HTTP error %s)" % (self.url, self.http_error_code)
 
 
 class FileNotFoundInDirectory(Error):
@@ -81,7 +81,7 @@ class FileNotFoundInDirectory(Error):
     self.dirname = dirname
   
   def __str__(self):
-    return "Cannot find file '%s' in directory '%s'" % (self.fname, self.dirname)
+    return "Cannot find the file '%s' in the specified directory '%s'" % (self.fname, self.dirname)
 
 
 class FileNotFoundInDirectorySearch(Error):
@@ -90,7 +90,7 @@ class FileNotFoundInDirectorySearch(Error):
     self.dirname_list = dirname_list
   
   def __str__(self):
-    return "Cannot find file '%s' in any of directories [%s]" \
+    return "Cannot find the file '%s' in any of the directories [%s]" \
         % (self.fname, ", ".join(self.dirname_list))
 
 

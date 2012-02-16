@@ -232,7 +232,7 @@ label.help-info {
 label.help-info code {
 	font-size: 115%;
 }
-p.wiki-area-message, p.tags-message {
+p.wiki-area-message, p.tags-message, p.create-new-attachment-message {
 	border: 1px dotted #999999;
 	font-family: sans-serif;
 	font-size: 95%;

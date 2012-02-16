@@ -1,23 +1,37 @@
 <form method="post" action="{{ post_action_url }}">
 	{{ xsrf_form_html() }}
 
-	<label for=filename">Attach a file on disk:</label>
-		<span class="required-form-field">*</span><br />
-	<input type="text" name="filename" id="filename" size="40" /><br />
+	<div class="create-attachment-form">
 
-	<label for=dirpath">Directory path to file:</label>
-		<small>(if not in ~/Downloads, ~/Desktop or ~, searched in that order)</small><br />
-	<input type="text" name="dirpath" id="dirpath" size="80" /><br />
+		<fieldset class="create-new-attachment-field">
+			<label class="title" for=filename">Attach a file on disk:</label>
+				<span class="required-form-field">*</span><br />
+			<input type="text" name="filename" id="filename" size="40" />
+		</fieldset>
 
-	<label for=new-filename">New name for file:</label>
-		<small>(if you want to change the name)</small><br />
-	<input type="text" name="new-filename" id="new-filename" size="40" /><br />
+		<fieldset class="create-new-attachment-field">
+			<label class="title" for=dirpath">Directory path to file:</label>
+				<label class="help-info" for="dirpath">if the file is not in ~/Downloads, ~/Desktop or ~ (searched in that order)</label>
+			<input type="text" name="dirpath" id="dirpath" size="80" />
+		</fieldset>
 
-	<label for=short-descr">Short description of attachment:</label><br />
-	<input type="text" name="short-descr" id="short-descr" size="80" /><br />
+		<fieldset class="create-new-attachment-field">
+			<label class="title" for=new-filename">New name for file:</label>
+				<label class="help-info" for="new-filename">if you want to change the filename when the file is imported</label>
+			<input type="text" name="new-filename" id="new-filename" size="40" />
+		</fieldset>
 
-	<label for=source-url">Original source URL of file:</label><br />
-	<input type="text" name="source-url" id="source-url" size="80" /><br />
+		<fieldset class="create-new-attachment-field">
+			<label class="title" for=short-descr">Short description of attachment:</label><br />
+			<input type="text" name="short-descr" id="short-descr" size="80" />
+		</fieldset>
 
-	<input type="submit" name="submit-button" value="Attach" id="attach-file" />
+		<fieldset class="create-new-attachment-field">
+			<label class="title" for=source-url">Original source URL of file:</label><br />
+			<input type="text" name="source-url" id="source-url" size="80" />
+		</fieldset>
+
+		<input type="submit" name="submit-button" value="Attach" id="attach-file" />
+
+	</div>
 </form>

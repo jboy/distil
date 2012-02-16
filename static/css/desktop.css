@@ -34,7 +34,7 @@ div.column-container ul {
 	padding-bottom: 0.2em;
 	width: 23%;  // Seems to need to be < 25%, or the 4th column wraps.
 }
-div#edit-topic-tags, div.wiki-area, div#edit-abstract, fieldset.stand-alone {
+div#edit-topic-tags, div.wiki-area, div.create-attachment-form, div#edit-abstract, fieldset.stand-alone {
 	background: #f0f9ff;
 	border: 1px #999999 solid;
 	padding: 0.3em;
@@ -185,6 +185,13 @@ form fieldset#new-tags-container {
 	margin: 0;
 	padding: 0;
 }
+form fieldset.create-new-attachment-field {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.3em;
+	padding-top: 0.3em;
+}
 h1 {
 	font-size: 175%;
 	margin-bottom: 0.3em;
@@ -252,6 +259,9 @@ p.message-saved {
 }
 span.message-error {
 	background: #ff9999;
+}
+span.required-form-field {
+	color: #ff0000;
 }
 .html-rendered-wiki {
 	background: white;

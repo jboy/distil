@@ -26,6 +26,7 @@ import types
 import tornado.web
 
 from collections import defaultdict
+from PIL import Image
 
 import abstract_file_io
 import attachments
@@ -329,6 +330,8 @@ class TagXHandler(CiteKeyListBaseHandler):
         topic_tag=topic_tag, filter_by_tags=self.get_arguments("shta"))
 
 
+KNOWN_IMAGE_FILENAME_SUFFIXES = ['PNG', 'JPG', 'JPEG', 'GIF']
+
 class AttachmentXHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self, dirname):
@@ -341,6 +344,22 @@ class AttachmentXHandler(BaseHandler):
     (fname, dirname, fsize, descr, source_url, suffix, ftype, static_path) = \
         attachments.get_attachment_attrs(dirname)
 
+    is_image = False
+    img_width = None
+    img_height = None
+    if ftype in KNOWN_IMAGE_FILENAME_SUFFIXES:
+      try:
+        # If this next line throws an exception, the file does not contain
+        # a recognised image format.
+        fname_abspath = os.path.join(dirname_abspath, fname)
+        img = Image.open(fname_abspath)
+
+        is_image = True
+        img_width, img_height = img.size
+      except IOError as e:
+        # Not a recognised image format
+        pass
+
     self.render("attachment-x.html", title=fname,
       dirname=dirname,
       fsize=fsize,
@@ -348,6 +367,10 @@ class AttachmentXHandler(BaseHandler):
       source_url=source_url,
       suffix=suffix,
       ftype=ftype,
+      is_image=is_image,
+      img_width=img_width,
+      img_height=img_height,
+      img_preview_width=750,
       static_path=static_path)
 
 

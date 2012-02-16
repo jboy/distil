@@ -53,6 +53,7 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
           store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
       return attachment_id
     else:
+      # FIXME:  Need better error messages
       return None
   else:
     for loc in ATTACHMENT_IMPORT_SEARCH_LOCATIONS:
@@ -65,6 +66,7 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
         return attachment_id
 
     # Otherwise, no luck finding the named file in any of the search directories.
+    # FIXME:  Need better error messages
     return None
 
 

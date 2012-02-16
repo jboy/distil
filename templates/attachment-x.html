@@ -19,9 +19,12 @@
 
 		<tr><td class="summary-key">Download File</td>
 			<td class="summary-value">
-					<a href="{{ static_path }}">{{ fsize }}{% if ftype %} {{ ftype }}{% end %}</a>
-					{% if ftype in ['PNG', 'JPG', 'JPEG', 'GIF'] %}
-					<br /><br /><a href="{{ static_path }}"><img src="{{ static_path }}" width="750" /></a>
+				<a href="{{ static_path }}">{{ fsize }}{% if ftype %} {{ ftype }}{% end %}</a>{% if is_image %},
+				{{ img_width }} x {{ img_height }}px{% if img_width > img_preview_width %},
+					preview at {{ "%.2f" % (100.0 * img_preview_width / img_width) }}% {% end %}
+					<br /><br /><a href="{{ static_path }}"><img src="{{ static_path }}"
+						{% if img_width > img_preview_width %} width="{{ img_preview_width}}" {% end %}
+						/></a>
 					{% end %}
 		</td></tr>
 	</table>

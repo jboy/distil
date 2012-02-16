@@ -43,6 +43,8 @@ BEGIN_ITALIC = "<i>"
 END_ITALIC = "</i>"
 BEGIN_CODE = "<code>"
 END_CODE = "</code>"
+BEGIN_HIGHLIGHT = '<span style="background: yellow;">'
+END_HIGHLIGHT = "</span>"
 
 # List tags.
 ITEMIZE = "ul"
@@ -301,6 +303,9 @@ def make_monospace(obj):
   # upon this text.
   return '%s%s%s' % (BEGIN_CODE, obj.group('text'), END_CODE)
 
+def make_highlight(obj):
+  return '%s%s%s' % (BEGIN_HIGHLIGHT, obj.group('text'), END_HIGHLIGHT)
+
 def make_cite(obj):
   def exists(ck):
     ck_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.BIBS_SUBDIR, ck)
@@ -388,6 +393,8 @@ RECOGNISED_MARKUP = [
   # The extra-complicated regex for italics is to avoid matching a colon (":") before the "//"
   # (which would occur in "http://", "ftp://" and "file://", for example).
   (re.compile(r'(?<!:)//(?P<text>.+?)(?<!:)//'), make_italic),
+
+  (re.compile(r'\+\+\+(?P<text>.+?)\+\+\+'), make_highlight),
   (re.compile(r'`(?P<text>[^`]+)`'), make_monospace),
 
   # A minor extension of the Trac syntax, to support citations to other entries.

@@ -142,6 +142,14 @@ class LogoutHandler(BaseHandler):
     self.redirect("/login")
 
 
+CREATE_ATTACHMENT_FORM_FIELD_NAMES = [
+    "filename",
+    "dirpath",
+    "new-filename",
+    "short-descr",
+    "source-url",
+]
+
 class AttachmentsHandler(BaseHandler):
   @tornado.web.authenticated
   def get(self):
@@ -152,9 +160,9 @@ class AttachmentsHandler(BaseHandler):
       self.redirect("/attachments")
 
     fields = extract_attachment_form_fields(self)
-    if not fields["filename"]:
-      # FIXME:  Re-populate the fields with the values passed in by the user.
-      self.redirect("/attachments")
+    if "filename" not in fields:
+      self.render_page(fields, "Please supply the filename of the attachment")
+      return
 
     try:
       attachment_id = attachments.store_new_attachment_incl_dirpath(**fields)
@@ -167,11 +175,24 @@ class AttachmentsHandler(BaseHandler):
       self.render_page(fields, error_msg)
 
   def render_page(self, fields={}, error_msg=""):
+    def convert_to_variable_name(s):
+      return s.replace('-', '_')
+
     attachments_with_attrs = self.get_attachments_with_attrs()
+
     create_attachment_form_params = dict(
         post_action_url="/attachments",
         error_msg=error_msg
     )
+    # Re-populate the fields with the values that were passed in by the user.
+    for fn in CREATE_ATTACHMENT_FORM_FIELD_NAMES:
+      fn_var_name = convert_to_variable_name(fn)
+      fn_var_name_init = "%s_init" % fn_var_name
+      if fn_var_name in fields:
+        create_attachment_form_params[fn_var_name_init] = fields[fn_var_name]
+      else:
+        create_attachment_form_params[fn_var_name_init] = ""
+
     self.render("attachments.html", title="Attachments", items=attachments_with_attrs,
         create_attachment_form_params=create_attachment_form_params)
 
@@ -193,16 +214,8 @@ def extract_attachment_form_fields(calling_obj):
   def convert_to_variable_name(s):
     return s.replace('-', '_')
 
-  field_names = [
-      "filename",
-      "dirpath",
-      "new-filename",
-      "short-descr",
-      "source-url",
-  ]
-
   extracted_form_fields = {}
-  for fn in field_names:
+  for fn in CREATE_ATTACHMENT_FORM_FIELD_NAMES:
     field_val = extract_elem_from_list_if_present(calling_obj.get_arguments(fn))
     if field_val:
       extracted_form_fields[convert_to_variable_name(fn)] = field_val

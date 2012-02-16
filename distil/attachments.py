@@ -50,6 +50,22 @@ class Error(Exception):
   pass
 
 
+class InvalidFilename(Error):
+  def __init__(self, fname):
+    self.fname = fname
+  
+  def __str__(self):
+    return "'%s' is an invalid filename" % self.fname
+
+
+class InvalidDirname(Error):
+  def __init__(self, dirname):
+    self.dirname = dirname
+  
+  def __str__(self):
+    return "'%s' is an invalid directory name" % self.dirname
+
+
 class CannotOpenURL(Error):
   def __init__(self, url, http_error_code):
     self.url = url
@@ -74,13 +90,25 @@ class FileNotFoundInDirectorySearch(Error):
     self.dirname_list = dirname_list
   
   def __str__(self):
-    return "Cannot find file '%s' in directory search in [%s]" \
+    return "Cannot find file '%s' in any of directories [%s]" \
         % (self.fname, ", ".join(self.dirname_list))
 
+
+STRIP_ALL_PUNCTUATION_AND_WHITESPACE = \
+    unicode_string_utils.StripPunctuationAndWhitespace()
+
+ALLOWED_PUNCTUATION = "-_.:"
+STRIP_MOST_PUNCTUATION_AND_WHITESPACE = \
+    unicode_string_utils.StripPunctuationAndWhitespace(ALLOWED_PUNCTUATION)
 
 # Don't change these parameter names, because we use double-asterisk
 # function invocation to pass parameters by name.
 def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", short_descr="", source_url=""):
+
+  # Ensure the filename isn't empty, or just dots or some other punctuation.
+  if STRIP_ALL_PUNCTUATION_AND_WHITESPACE(unicode(filename)) == "":
+    raise InvalidFilename(filename)
+
   if filename.startswith("http://"):
     # Be ready to handle 404s, etc.
     try:
@@ -92,6 +120,10 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
     except urllib2.HTTPError as e:
       raise CannotOpenURL(filename, e.code)
   elif dirpath:
+    # Ensure the dirname isn't empty, or just dots or some other punctuation.
+    if STRIP_ALL_PUNCTUATION_AND_WHITESPACE(unicode(dirpath)) == "":
+      raise InvalidDirname(dirpath)
+
     filename_incl_dirpath = os.path.join(dirpath, filename)
     if os.path.exists(filename_incl_dirpath):
       (attachment_id, attachment_path) = \
@@ -113,10 +145,6 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
     raise FileNotFoundInDirectorySearch(filename, ATTACHMENT_IMPORT_SEARCH_LOCATIONS)
 
 
-ALLOWED_PUNCTUATION = "-_.:"
-STRIP_PUNCTUATION_AND_WHITESPACE = \
-    unicode_string_utils.StripPunctuationAndWhitespace(ALLOWED_PUNCTUATION)
-
 def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fname="",
     url_contents=None):
   """Store a new attachment in the doclib."""
@@ -131,7 +159,7 @@ def store_new_attachment(attachment_fname, short_descr="", source_url="", new_fn
 
   if new_fname:
     # We'll use this as the filename instead.
-    target_fname = STRIP_PUNCTUATION_AND_WHITESPACE(unicode(
+    target_fname = STRIP_MOST_PUNCTUATION_AND_WHITESPACE(unicode(
         new_fname.replace(' ', '-').replace('/', '-')))
   else:
     # I've checked that 'os.path.basename' also does the correct thing for URLs.

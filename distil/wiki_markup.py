@@ -119,7 +119,18 @@ def read_wiki_lines_and_transform(f, state):
       output_lines.append(s)
       continue
 
-    s = apply_line_filters(s, line_num, output_lines, state)
+    try:
+      s = apply_line_filters(s, line_num, output_lines, state)
+    except UnicodeDecodeError as e:
+      print >> sys.stderr, \
+          "Caught UnicodeDecodeError on line %d of input: %s\nLine of text is:\n%s" \
+          % (line_num, repr(e), s)
+      raise
+    except Exception as e:
+      print >> sys.stderr, \
+          "Caught Exception on line %d of input: %s\nLine of text is:\n%s" \
+          % (line_num, repr(e), s)
+      raise
     output_lines.append(s)
 
   close_any_lists(output_lines, state)

@@ -27,7 +27,15 @@ Library Dependencies:
    This license is GPL compatible (since you can choose to apply the GPL)
     http://www.gnu.org/licenses/license-list.html#PerlLicense
 
-Note that Distil does not include any source code from these libraries, so
-none of these libraries have any effect upon the license under which Distil
-may be distributed.
+ * Python Imaging Library (PIL)
+    http://pypi.python.org/pypi/PIL
+
+   License: Python License
+    http://www.python.org/download/releases/2.6/license/
+   This license is GPL compatible
+    http://www.gnu.org/licenses/license-list.html#Python
+
+Note that at present, Distil does not include any source code
+from these libraries, so none of these libraries have any effect
+upon the license under which Distil may be distributed.
 

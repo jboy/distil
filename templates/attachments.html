@@ -7,6 +7,8 @@
 
 {{ modules.CreateAttachmentForm(create_attachment_form_params) }}
 
+<h2>Current attachments</h2>
+
 <ul class="ids-with-titles">
 {% for fname, dirname, fsize, descr, source_url, suffix, ftype, static_path in items %}
 	<li><a href="/attachment/{{ escape(dirname) }}" class="cite-key"><span class="filename">{{ escape(fname) }}</span></a>

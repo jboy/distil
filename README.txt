@@ -1,7 +1,7 @@
 README:
 ------
 
-1. There are 4 Python library dependencies, listed in "DEPS.txt".
+1. There are 5 Python library dependencies, listed in "DEPS.txt".
 
 2. You need a per-installation config file named ".distil.cfg" in
 either your home directory or the directory from which you run Distil;
@@ -44,9 +44,10 @@ of the Trac wiki syntax.  In particular:
  * A wiki word is created using [square brackets]
    * Wiki words are case-insensitive (they will be converted to lower)
    * Spaces are allowed (they will be converted to hyphens)
- * Cite another bib in Distil using [cite:the-cite-key-of-the-bib]
+ * Cite a paper in Distil using [cite:the-cite-key-of-the-paper]
  * **bold text** (currently must be completely on a single line, alas)
  * //italicised text// (again, currently must be on a single line)
+ * +++highlighted text+++ (on a single line)
 
 8. For more documentation about Distil (including screenshots and
 presentation slides that provide a higher-level overview), take a look

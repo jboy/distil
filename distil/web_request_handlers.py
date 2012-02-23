@@ -201,7 +201,15 @@ class AttachmentsHandler(BaseHandler):
     all_attachment_dirnames = os.listdir(self.attachments_subdir_abspath)
     attachments_with_attrs = [attachments.get_attachment_attrs(dirname)
         for dirname in all_attachment_dirnames]
-    return sorted(attachments_with_attrs)
+
+    # We want the attachment index to be sorted primarily by the
+    # human-readable filename (compared case-INSENSITIVELY), and
+    # secondarily by the unique attachment ID (to ensure that if there
+    # are duplicate human-readable filenames, their relative ordering
+    # will be stable).
+    return sorted(
+        sorted(attachments_with_attrs, key=lambda t: t[1]),
+            key=lambda t: t[0].lower())
 
 
 def extract_attachment_form_fields(calling_obj):

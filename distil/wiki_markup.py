@@ -408,7 +408,7 @@ RECOGNISED_MARKUP = [
 
   # Excuse the fairly arbitrary definition of which characters a URL can contain, or where
   # a URL ends...
-  (re.compile(r'(?P<text>http://(?:[^][{}()<> ,.;:!?"]|[,;:!?](?! )|[.](?![.]))+)'), make_url),
+  (re.compile(r'(?P<text>https?://(?:[^][{}()<> ,.;:!?"]|[,;:!?](?! )|[.](?![.]))+)'), make_url),
 
   # A minor extension of the Trac syntax, to support footnotes.
   #(re.compile(r'\[\[Footnote\((?P<text>.+?)\)\]\]', re.I), make_footnote),

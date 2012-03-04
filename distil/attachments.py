@@ -23,6 +23,7 @@
 import base64
 import ConfigParser
 import errno
+import glob
 import os
 import shutil
 import urllib2
@@ -125,9 +126,11 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
       raise InvalidDirname(dirpath)
 
     filename_incl_dirpath = os.path.join(dirpath, filename)
-    if os.path.exists(filename_incl_dirpath):
-      (attachment_id, attachment_path) = \
-          store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
+    glob_match = glob.glob(filename_incl_dirpath)
+    if glob_match:
+      for m in glob_match:
+        (attachment_id, attachment_path) = \
+            store_new_attachment(m, short_descr, source_url, new_filename)
       return attachment_id
     else:
       raise FileNotFoundInDirectory(filename, dirpath)
@@ -136,9 +139,11 @@ def store_new_attachment_incl_dirpath(filename, dirpath="", new_filename="", sho
       location = os.path.expanduser(loc)
 
       filename_incl_dirpath = os.path.join(location, filename)
-      if os.path.exists(filename_incl_dirpath):
-        (attachment_id, attachment_path) = \
-            store_new_attachment(filename_incl_dirpath, short_descr, source_url, new_filename)
+      glob_match = glob.glob(filename_incl_dirpath)
+      if glob_match:
+        for m in glob_match:
+          (attachment_id, attachment_path) = \
+              store_new_attachment(m, short_descr, source_url, new_filename)
         return attachment_id
 
     # Otherwise, no luck finding the named file in any of the search directories.

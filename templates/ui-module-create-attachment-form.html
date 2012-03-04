@@ -10,13 +10,14 @@
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=filename">Name of file on disk:</label>
 				<span class="required-form-field">*</span>
-				<label class="help-info" for="dirpath">This can be the name of a file on disk, or the URL of a remote file.</label>
+				<label class="help-info" for="dirpath">This can be the name of a file on disk, or the URL of a remote file.
+					<br />Note that shell globbing wildcard characters such as * and ? will be interpreted for files on disk.</label>
 				<input type="text" name="filename" id="filename" size="80" value="{{ filename_init }}" />
 		</fieldset>
 
 		<fieldset class="create-new-attachment-field">
 			<label class="title" for=dirpath">Directory path to file:</label>
-				<label class="help-info" for="dirpath">... if the specified filename is not a URL and is not in any of ~/Downloads/, ~/Desktop/ or ~/
+				<label class="help-info" for="dirpath">... if the specified filename is a file on disk and is not in any of ~/Downloads/, ~/Desktop/ or ~/
 					<br />(which will be searched in that order).</label>
 				<input type="text" name="dirpath" id="dirpath" size="80" value="{{ dirpath_init }}" />
 		</fieldset>
@@ -25,7 +26,9 @@
 			<label class="title" for=new-filename">New name for file:</label>
 				<label class="help-info" for="new-filename">... if you want to change the filename that will be shown in the list below.
 					<br />Attachment filenames don't need to be unique, but informative names are recommended
-					<br />and the filename suffix will be used to determine the file type.</label>
+					<br />and the filename suffix will be used to determine the file type.
+					<br />Beware: If you specify a new filename, but several files match a wildcard glob, they will all
+					<br />be renamed to the same new name when they are imported.</label>
 				<input type="text" name="new-filename" id="new-filename" size="40" value="{{ new_filename_init }}" />
 		</fieldset>
 

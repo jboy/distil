@@ -72,14 +72,35 @@ class InputSyntaxError(Error):
     return self.message
 
 
+# Suggested by http://wiki.python.org/moin/EscapingHtml
+HTML_ESCAPE_TABLE = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+}
+
+
+def html_escape(text):
+  """According to http://wiki.python.org/moin/EscapingHtml
+  there is no standard approach to escaping HTML properly...  :(
+  """
+  return "".join(HTML_ESCAPE_TABLE.get(c, c) for c in text)
+
+
 def read_wiki_lines_and_transform(f, state):
   output_lines = []
   if not state.has_key(CURRENT_LIST_NESTING):
     state[CURRENT_LIST_NESTING] = []
 
-  BEGIN_PREFORMAT = '{{{'
-  END_PREFORMAT = '}}}'
+  BEGIN_PREFORMAT = '{{{pre'
+  END_PREFORMAT = 'pre}}}'
   preformatted_text = False
+
+  BEGIN_LITERAL = '{{{'
+  END_LITERAL = '}}}'
+  literal_text = False
 
   line_num = 0
   for line in f:
@@ -87,30 +108,61 @@ def read_wiki_lines_and_transform(f, state):
 
     s = line.rstrip()
 
-    # First, we need to pass any preformatted (raw HTML) text unchanged.
-    # We only recognise the beginning of preformatted text ('{{{') at the start of the line.
+    # First, we need to pass any preformatted (HTML <pre>) text HTML-quoted.
+    # We only recognise the beginning of preformatted text ('{{{pre') at the start of the line.
     if s.startswith(BEGIN_PREFORMAT):
       preformatted_text = True
-      # For convenience, we allow preformatted text to continue on the same line as the '{{{'.
-      # But if there is no text after the '{{{', don't output an empty line.
+      output_lines.append('<pre>')
+      # For convenience, we allow preformatted text to continue on the same line as the '{{{pre'.
+      # But if there is no text after the '{{{pre', don't output an empty line.
       s = s[len(BEGIN_PREFORMAT):]
       if not s:
         continue
 
     if preformatted_text:
-      # Allow text before the end of the preformatted text ('}}}') on the line, but not after.
-      # Anything before the '}}}' (ignoring empty text) will be output as preformatted text.
-      # Note that we ignore nesting of '{{{' within preformatted text.
+      # Allow text before the end of the preformatted text ('pre}}}') on the line, but not after.
+      # Anything before the 'pre}}}' (ignoring empty text) will be output as preformatted text.
+      # Note that we ignore nesting of '{{{pre' within preformatted text.
       if s.find(END_PREFORMAT) != -1:
         # We end the preformatted text somewhere in this line.
         preformatted_text = False
         parts = s.partition(END_PREFORMAT)
         before_end = parts[0].rstrip()
         if before_end:
-          output_lines.append(before_end)
+          output_lines.append(html_escape(before_end) + '</pre>')
+        else:
+          output_lines.append('</pre>')
       else:
         # Continue with the preformatted text.
         # Note that we output all preformatted text which is not on the same line as the
+        # beginning or end markers, even if it's an empty line.
+        output_lines.append(html_escape(s))
+      continue
+
+    # First, we need to pass any literal (raw HTML) text unchanged.
+    # We only recognise the beginning of literal text ('{{{') at the start of the line.
+    if s.startswith(BEGIN_LITERAL):
+      literal_text = True
+      # For convenience, we allow literal text to continue on the same line as the '{{{'.
+      # But if there is no text after the '{{{', don't output an empty line.
+      s = s[len(BEGIN_LITERAL):]
+      if not s:
+        continue
+
+    if literal_text:
+      # Allow text before the end of the literal text ('}}}') on the line, but not after.
+      # Anything before the '}}}' (ignoring empty text) will be output as literal text.
+      # Note that we ignore nesting of '{{{' within literal text.
+      if s.find(END_LITERAL) != -1:
+        # We end the literal text somewhere in this line.
+        literal_text = False
+        parts = s.partition(END_LITERAL)
+        before_end = parts[0].rstrip()
+        if before_end:
+          output_lines.append(before_end)
+      else:
+        # Continue with the literal text.
+        # Note that we output all literal text which is not on the same line as the
         # beginning or end markers, even if it's an empty line.
         output_lines.append(s)
       continue
@@ -139,8 +191,8 @@ def read_wiki_lines_and_transform(f, state):
   return markup_paragraphs(output_lines)
 
 
-BLOCK_OPEN_TAG_PATTERNS = re.compile(r'^<ol>|^<ul>|^<h\d>')
-BLOCK_CLOSE_TAG_PATTERNS = re.compile(r'</ol>$|</ul>$|</li>$|</h\d>$')
+BLOCK_OPEN_TAG_PATTERNS = re.compile(r'^<ol>|^<ul>|^<h\d>|^<pre>')
+BLOCK_CLOSE_TAG_PATTERNS = re.compile(r'</ol>$|</ul>$|</li>$|</h\d>$|</pre>$')
 
 def markup_paragraphs(lines):
   if not lines:

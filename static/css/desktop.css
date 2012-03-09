@@ -206,6 +206,19 @@ h2 {
 	margin-right: -0.1em;
 	padding-top: 0.0em;
 }
+div.wiki-word-page div.html-rendered-wiki h3 {
+	font-size: 180%;
+	margin-bottom: 0.3em;
+	margin-left: -0.1em;
+	margin-right: -0.1em;
+	margin-top: 0.5em;
+}
+div.wiki-word-page div.html-rendered-wiki h4 {
+	font-size: 135%;
+}
+div.wiki-word-page div.html-rendered-wiki h5 {
+	font-size: 105%;
+}
 input.specify-new-tags, input.wiki-change-descr {
 	background: #fffff6;
 }

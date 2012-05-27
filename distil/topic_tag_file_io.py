@@ -236,6 +236,7 @@ def get_all_topic_tags(sort_tags=True):
   """Return a list of all the topic tags in the topic tag index."""
 
   index_dir_abspath = os.path.join(config.DOCLIB_BASE_ABSPATH, constants.TOPIC_TAG_INDEX_SUBDIR)
+  filesystem_utils.ensure_dir_exists(index_dir_abspath)
   all_topic_tags = os.listdir(index_dir_abspath)
   if sort_tags:
     all_topic_tags.sort()
